@@ -6,8 +6,8 @@ y = 12
 
 print(x+y)
 
-# loop 0 through 9
+# loop prints
 for i in range(10):
-    for j in range(2):
+    for j in range(10):
         print(i, end = "")
     print("")
