@@ -1,4 +1,4 @@
-# ValorantProject
+# TeamStatProject
 Program that calculates team stats
 
 Hello 
