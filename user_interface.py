@@ -3,6 +3,7 @@ import ctypes
 
 # First task is to ask for user Information
 userInput = input("Enter Riot ID (\"example#0000\"): ")
+userRegion = input("Enter Region: (na, eu, ap, kr): ")
 
 # valid input == 0 if invalid, anything else means valid
 
@@ -43,8 +44,27 @@ else:
 
     print("\"" + userName + "\"")
     print("\"" + userTag + "\"")
+    print("\"" + userRegion + "\"")
 
 
     # userTag and userName should be good to use now
 
 
+# api call for user
+
+if (validInput != 0):
+
+    data = {
+        'Region': userRegion,
+        'Username': userName,
+        'Tagline': userTag,
+    }
+
+    headers = {
+        'accept': 'application/json',
+        'Content-Type': 'application/json',
+    }
+
+    response = requests.get('https://api.henrikdev.xyz/valorant/v3/matches/'+userRegion+'/'+userName+'/'+userTag, )
+
+    print(response.text)
