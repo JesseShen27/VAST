@@ -39,6 +39,7 @@ else:
 
     userTag = userTag.strip("%")
     userName = userName.strip("%")
+    validInput = 1
 
     print("\"" + userName + "\"")
     print("\"" + userTag + "\"")
@@ -46,4 +47,4 @@ else:
 
     # userTag and userName should be good to use now
 
-    
+
