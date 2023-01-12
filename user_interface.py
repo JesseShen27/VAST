@@ -55,20 +55,9 @@ else:
 
 if (validInput != 0):
 
-    data = {
-        'Region': userRegion,
-        'Username': userName,
-        'Tagline': userTag,
-    }
+    response = requests.get('https://api.henrikdev.xyz/valorant/v3/matches/'+userRegion+'/'+userName+'/'+userTag)
 
-    headers = {
-        'accept': 'application/json',
-        'Content-Type': 'application/json',
-    }
-
-    response = requests.get('https://api.henrikdev.xyz/valorant/v3/matches/'+userRegion+'/'+userName+'/'+userTag, )
 
     responseJson = response.json()
 
-    print(responseJson['data'][0]['players']['all_players'][0]['name'])
-    
+    print(responseJson['data'][0]['players']['all_players'][0]['stats']['kills'])
