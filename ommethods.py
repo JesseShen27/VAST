@@ -1,1 +1,0 @@
-print("om is alpha")

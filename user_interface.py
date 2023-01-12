@@ -1,4 +1,5 @@
 import requests
+import json
 import ctypes
 
 # First task is to ask for user Information
@@ -67,4 +68,7 @@ if (validInput != 0):
 
     response = requests.get('https://api.henrikdev.xyz/valorant/v3/matches/'+userRegion+'/'+userName+'/'+userTag, )
 
-    print(response.text)
+    responseJson = response.json()
+
+    print(responseJson['data'][0]['players']['all_players'][0]['name'])
+    
