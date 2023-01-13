@@ -1,5 +1,6 @@
 import requests
-from Player import Player
+from player import Player
+from match import Match
 import json
 import ctypes
 
@@ -9,7 +10,7 @@ userRegion = input("Enter Region: (na, eu, ap, kr): ")
 
 # valid input == 0 if invalid, anything else means valid
 
-validInput = 0
+validInput = False
 
 if (len(userInput) > 22 or len(userInput) < 8):
     print("Invalid Riot ID")
@@ -42,7 +43,7 @@ else:
 
     userTag = userTag.strip("%")
     userName = userName.strip("%")
-    validInput = 1
+    validInput = True
 
     print("\"" + userName + "\"")
     print("\"" + userTag + "\"")
@@ -61,9 +62,32 @@ if (validInput != 0):
 
     responseJson = response.json()
 
-   
-    players = [] * 10
-    tmpPlayer = Player()
+    player1 = Player()
+    player2 = Player()
+    player3 = Player()
+    player4 = Player()
+    player5 = Player()
+    player6 = Player()
+    player7 = Player()
+    player8 = Player()
+    player9 = Player()
+    player10 = Player()
 
-    for i in range (10):
-        players[i] = 
+    players = [player1, player2, player3, player4, player5 ,player6 ,player7 ,player8 ,player9 ,player10]
+
+    for playerIndex in range(10):
+        if (responseJson['data'][0]['players']['all_players'][playerIndex]['name'] == userName):
+            players[playerIndex].isUser = True
+            players[playerIndex].deaths = responseJson['data'][0]['players']['all_players'][playerIndex]['stats']['deaths']
+            players[playerIndex].kills = responseJson['data'][0]['players']['all_players'][playerIndex]['stats']['kills']
+            players[playerIndex].puuid = responseJson['data'][0]['players']['all_players'][playerIndex]['puuid']
+            players[playerIndex].teamColor = responseJson['data'][0]['players']['all_players'][playerIndex]['team']
+        else:
+            players[playerIndex].isUser = False
+            players[playerIndex].deaths = responseJson['data'][0]['players']['all_players'][playerIndex]['stats']['deaths']
+            players[playerIndex].kills = responseJson['data'][0]['players']['all_players'][playerIndex]['stats']['kills']
+            players[playerIndex].puuid = responseJson['data'][0]['players']['all_players'][playerIndex]['puuid']
+            players[playerIndex].teamColor = responseJson['data'][0]['players']['all_players'][playerIndex]['team']
+        
+    for i in range(10):
+        print("player", i + 1, ": " + str(players[i]))
