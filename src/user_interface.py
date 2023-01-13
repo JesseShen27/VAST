@@ -88,6 +88,22 @@ if (validInput != 0):
             players[playerIndex].kills = responseJson['data'][0]['players']['all_players'][playerIndex]['stats']['kills']
             players[playerIndex].puuid = responseJson['data'][0]['players']['all_players'][playerIndex]['puuid']
             players[playerIndex].teamColor = responseJson['data'][0]['players']['all_players'][playerIndex]['team']
-        
-    for i in range(10):
-        print("player", i + 1, ": " + str(players[i]))
+
+    # Beginning match setup
+    match = Match()
+    blueCount = 0
+    redCount = 0
+
+    # Looping through players
+    for matchIndex in range(10):
+        if (players[matchIndex].teamColor == "Blue") :
+            match.blueTeam[blueCount] = players[matchIndex]
+            blueCount += 1
+        else:
+            match.redTeam[redCount] = players[matchIndex]
+            redCount += 1
+        # Determining if the player is the user
+        if (players[matchIndex].isUser == True) :
+            match.userTeamColor = players[matchIndex].teamColor
+    
+    print(match)
