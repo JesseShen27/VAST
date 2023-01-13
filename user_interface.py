@@ -1,4 +1,5 @@
 import requests
+from Player import Player
 import json
 import ctypes
 
@@ -55,9 +56,14 @@ else:
 
 if (validInput != 0):
 
-    response = requests.get('https://api.henrikdev.xyz/valorant/v3/matches/'+userRegion+'/'+userName+'/'+userTag)
+    response = requests.get('https://api.henrikdev.xyz/valorant/v3/matches/'+userRegion+'/'+userName+'/'+userTag+'?filter=competitive')
 
 
     responseJson = response.json()
 
-    print(responseJson['data'][0]['players']['all_players'][0]['stats']['kills'])
+   
+    players = [] * 10
+    tmpPlayer = Player()
+
+    for i in range (10):
+        players[i] = 
