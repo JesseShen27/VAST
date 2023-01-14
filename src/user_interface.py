@@ -93,22 +93,36 @@ if (validInput != 0):
     match = Match()
     blueCount = 0
     redCount = 0
+    roundsWon = None
+    roundsLost = None
 
     # Looping through players
     for matchIndex in range(10):
         if (players[matchIndex].teamColor == "Blue") :
             match.blueTeam[blueCount] = players[matchIndex]
             if (players[matchIndex].isUser == True) :
-                match.userTeamColor = players[matchIndex].teamColor
+                match.userTeamColor = "blue"
                 match.userIndex = blueCount
             blueCount += 1
         else:
             match.redTeam[redCount] = players[matchIndex]
             if (players[matchIndex].isUser == True) :
-                match.userTeamColor = players[matchIndex].teamColor
+                match.userTeamColor = "red"
                 match.userIndex = redCount
-            redCount += 1
-            
-            
+            redCount += 1                 
     
+    if (match.userTeamColor == "blue"):
+        roundsLost = responseJson['data'][0]['teams']['blue']['rounds_lost']
+        roundsWon = responseJson['data'][0]['teams']['blue']['rounds_won']
+    else:
+        roundsLost = responseJson['data'][0]['teams']['red']['rounds_lost']
+        roundsWon = responseJson['data'][0]['teams']['red']['rounds_won']
+
+    if (roundsLost > roundsWon):
+        match.userWinLoss = "Loss"
+    elif (roundsWon > roundsLost):
+        match.userWinLoss = "Win"
+    elif (roundsWon == roundsLost):
+        match.userWinLoss = "Draw"
+
     print(match)
