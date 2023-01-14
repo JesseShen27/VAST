@@ -1,8 +1,63 @@
 import requests
 from player import Player
 from match import Match
+from database import Database
 import json
 import ctypes
+
+def set_players_array(players):
+     for playerIndex in range(10):
+        if (responseJson['data'][0]['players']['all_players'][playerIndex]['name'] == userName and responseJson['data'][0]['players']['all_players'][playerIndex]['tag']):
+            players[playerIndex].isUser = True
+            players[playerIndex].deaths = responseJson['data'][0]['players']['all_players'][playerIndex]['stats']['deaths']
+            players[playerIndex].kills = responseJson['data'][0]['players']['all_players'][playerIndex]['stats']['kills']
+            players[playerIndex].puuid = responseJson['data'][0]['players']['all_players'][playerIndex]['puuid']
+            players[playerIndex].teamColor = responseJson['data'][0]['players']['all_players'][playerIndex]['team']
+        else:
+            players[playerIndex].isUser = False
+            players[playerIndex].deaths = responseJson['data'][0]['players']['all_players'][playerIndex]['stats']['deaths']
+            players[playerIndex].kills = responseJson['data'][0]['players']['all_players'][playerIndex]['stats']['kills']
+            players[playerIndex].puuid = responseJson['data'][0]['players']['all_players'][playerIndex]['puuid']
+            players[playerIndex].teamColor = responseJson['data'][0]['players']['all_players'][playerIndex]['team']
+
+def set_match(players, match):
+    # Beginning match setup
+    blueCount = 0
+    redCount = 0
+    roundsWon = None
+    roundsLost = None
+
+    # Looping through players
+    for matchIndex in range(10):
+        if (players[matchIndex].teamColor == "Blue") :
+            match.blueTeam[blueCount] = players[matchIndex]
+            if (players[matchIndex].isUser == True) :
+                match.userTeamColor = "blue"
+                match.userIndex = blueCount
+            blueCount += 1
+        else:
+            match.redTeam[redCount] = players[matchIndex]
+            if (players[matchIndex].isUser == True) :
+                match.userTeamColor = "red"
+                match.userIndex = redCount
+            redCount += 1                 
+    
+    if (match.userTeamColor == "blue"):
+        roundsLost = responseJson['data'][0]['teams']['blue']['rounds_lost']
+        roundsWon = responseJson['data'][0]['teams']['blue']['rounds_won']
+    else:
+        roundsLost = responseJson['data'][0]['teams']['red']['rounds_lost']
+        roundsWon = responseJson['data'][0]['teams']['red']['rounds_won']
+
+    if (roundsLost > roundsWon):
+        match.userWinLoss = "Loss"
+    elif (roundsWon > roundsLost):
+        match.userWinLoss = "Win"
+    elif (roundsWon == roundsLost):
+        match.userWinLoss = "Draw"
+
+    print(match)
+    return match
 
 # First task is to ask for user Information
 userInput = input("Enter Riot ID (\"example#0000\"): ")
@@ -59,7 +114,6 @@ if (validInput != 0):
 
     response = requests.get('https://api.henrikdev.xyz/valorant/v3/matches/'+userRegion+'/'+userName+'/'+userTag+'?filter=competitive')
 
-
     responseJson = response.json()
 
     player1 = Player()
@@ -73,56 +127,36 @@ if (validInput != 0):
     player9 = Player()
     player10 = Player()
 
-    players = [player1, player2, player3, player4, player5 ,player6 ,player7 ,player8 ,player9 ,player10]
+    mainPlayers = [player1, player2, player3, player4, player5 ,player6 ,player7 ,player8 ,player9 ,player10]
 
-    for playerIndex in range(10):
-        if (responseJson['data'][0]['players']['all_players'][playerIndex]['name'] == userName):
-            players[playerIndex].isUser = True
-            players[playerIndex].deaths = responseJson['data'][0]['players']['all_players'][playerIndex]['stats']['deaths']
-            players[playerIndex].kills = responseJson['data'][0]['players']['all_players'][playerIndex]['stats']['kills']
-            players[playerIndex].puuid = responseJson['data'][0]['players']['all_players'][playerIndex]['puuid']
-            players[playerIndex].teamColor = responseJson['data'][0]['players']['all_players'][playerIndex]['team']
+    set_players_array(players=mainPlayers)
+
+    mainMatch = Match()
+
+    set_match(players=mainPlayers, match=mainMatch)
+
+    # can begin creating database and 9 other API calls
+    database = Database()
+    matchIndex = 0
+    playerLoc = None
+    for playerIndex in range(5):
+        if (mainMatch.blueTeam[playerIndex].isUser == True):
+            continue
         else:
-            players[playerIndex].isUser = False
-            players[playerIndex].deaths = responseJson['data'][0]['players']['all_players'][playerIndex]['stats']['deaths']
-            players[playerIndex].kills = responseJson['data'][0]['players']['all_players'][playerIndex]['stats']['kills']
-            players[playerIndex].puuid = responseJson['data'][0]['players']['all_players'][playerIndex]['puuid']
-            players[playerIndex].teamColor = responseJson['data'][0]['players']['all_players'][playerIndex]['team']
+            response = requests.get('https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/'+userRegion+'/'+mainPlayers[playerIndex].puuid)
 
-    # Beginning match setup
-    match = Match()
-    blueCount = 0
-    redCount = 0
-    roundsWon = None
-    roundsLost = None
+            responseJson = response.json()
 
-    # Looping through players
-    for matchIndex in range(10):
-        if (players[matchIndex].teamColor == "Blue") :
-            match.blueTeam[blueCount] = players[matchIndex]
-            if (players[matchIndex].isUser == True) :
-                match.userTeamColor = "blue"
-                match.userIndex = blueCount
-            blueCount += 1
-        else:
-            match.redTeam[redCount] = players[matchIndex]
-            if (players[matchIndex].isUser == True) :
-                match.userTeamColor = "red"
-                match.userIndex = redCount
-            redCount += 1                 
-    
-    if (match.userTeamColor == "blue"):
-        roundsLost = responseJson['data'][0]['teams']['blue']['rounds_lost']
-        roundsWon = responseJson['data'][0]['teams']['blue']['rounds_won']
-    else:
-        roundsLost = responseJson['data'][0]['teams']['red']['rounds_lost']
-        roundsWon = responseJson['data'][0]['teams']['red']['rounds_won']
+            #  finding index in match
+            for i in range(10):
+                if (mainMatch.blueTeam[playerIndex].puuid == responseJson):
+                    playerLoc = playerIndex
+            
 
-    if (roundsLost > roundsWon):
-        match.userWinLoss = "Loss"
-    elif (roundsWon > roundsLost):
-        match.userWinLoss = "Win"
-    elif (roundsWon == roundsLost):
-        match.userWinLoss = "Draw"
 
-    print(match)
+            
+
+            
+            
+
+            

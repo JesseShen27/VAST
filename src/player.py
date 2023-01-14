@@ -5,7 +5,6 @@ class Player:
         self.kills = None
         self.deaths = None
         self.teamColor = None
-
         self.isUser = False
 
 
