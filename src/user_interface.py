@@ -98,12 +98,17 @@ if (validInput != 0):
     for matchIndex in range(10):
         if (players[matchIndex].teamColor == "Blue") :
             match.blueTeam[blueCount] = players[matchIndex]
+            if (players[matchIndex].isUser == True) :
+                match.userTeamColor = players[matchIndex].teamColor
+                match.userIndex = blueCount
             blueCount += 1
         else:
             match.redTeam[redCount] = players[matchIndex]
+            if (players[matchIndex].isUser == True) :
+                match.userTeamColor = players[matchIndex].teamColor
+                match.userIndex = redCount
             redCount += 1
-        # Determining if the player is the user
-        if (players[matchIndex].isUser == True) :
-            match.userTeamColor = players[matchIndex].teamColor
+            
+            
     
     print(match)
