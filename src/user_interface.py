@@ -1,8 +1,63 @@
 import requests
 from player import Player
 from match import Match
+from database import Database
 import json
 import ctypes
+
+def set_players_array(players):
+     for playerIndex in range(10):
+        if (responseJson['data'][0]['players']['all_players'][playerIndex]['name'] == userName and responseJson['data'][0]['players']['all_players'][playerIndex]['tag']):
+            players[playerIndex].isUser = True
+            players[playerIndex].deaths = responseJson['data'][0]['players']['all_players'][playerIndex]['stats']['deaths']
+            players[playerIndex].kills = responseJson['data'][0]['players']['all_players'][playerIndex]['stats']['kills']
+            players[playerIndex].puuid = responseJson['data'][0]['players']['all_players'][playerIndex]['puuid']
+            players[playerIndex].teamColor = responseJson['data'][0]['players']['all_players'][playerIndex]['team']
+        else:
+            players[playerIndex].isUser = False
+            players[playerIndex].deaths = responseJson['data'][0]['players']['all_players'][playerIndex]['stats']['deaths']
+            players[playerIndex].kills = responseJson['data'][0]['players']['all_players'][playerIndex]['stats']['kills']
+            players[playerIndex].puuid = responseJson['data'][0]['players']['all_players'][playerIndex]['puuid']
+            players[playerIndex].teamColor = responseJson['data'][0]['players']['all_players'][playerIndex]['team']
+
+def set_match(players, match):
+    # Beginning match setup
+    blueCount = 0
+    redCount = 0
+    roundsWon = None
+    roundsLost = None
+
+    # Looping through players
+    for matchIndex in range(10):
+        if (players[matchIndex].teamColor == "Blue") :
+            match.blueTeam[blueCount] = players[matchIndex]
+            if (players[matchIndex].isUser == True) :
+                match.userTeamColor = "blue"
+                match.userIndex = blueCount
+            blueCount += 1
+        else:
+            match.redTeam[redCount] = players[matchIndex]
+            if (players[matchIndex].isUser == True) :
+                match.userTeamColor = "red"
+                match.userIndex = redCount
+            redCount += 1                 
+    
+    if (match.userTeamColor == "blue"):
+        roundsLost = responseJson['data'][0]['teams']['blue']['rounds_lost']
+        roundsWon = responseJson['data'][0]['teams']['blue']['rounds_won']
+    else:
+        roundsLost = responseJson['data'][0]['teams']['red']['rounds_lost']
+        roundsWon = responseJson['data'][0]['teams']['red']['rounds_won']
+
+    if (roundsLost > roundsWon):
+        match.userWinLoss = "Loss"
+    elif (roundsWon > roundsLost):
+        match.userWinLoss = "Win"
+    elif (roundsWon == roundsLost):
+        match.userWinLoss = "Draw"
+
+    print(match)
+    return match
 
 # First task is to ask for user Information
 userInput = input("Enter Riot ID (\"example#0000\"): ")
@@ -59,7 +114,6 @@ if (validInput != 0):
 
     response = requests.get('https://api.henrikdev.xyz/valorant/v3/matches/'+userRegion+'/'+userName+'/'+userTag+'?filter=competitive')
 
-
     responseJson = response.json()
 
     player1 = Player()
@@ -72,57 +126,117 @@ if (validInput != 0):
     player8 = Player()
     player9 = Player()
     player10 = Player()
+    mainPlayers = [player1, player2, player3, player4, player5 ,player6 ,player7 ,player8 ,player9 ,player10]
 
-    players = [player1, player2, player3, player4, player5 ,player6 ,player7 ,player8 ,player9 ,player10]
+    set_players_array(players=mainPlayers)
 
-    for playerIndex in range(10):
-        if (responseJson['data'][0]['players']['all_players'][playerIndex]['name'] == userName):
-            players[playerIndex].isUser = True
-            players[playerIndex].deaths = responseJson['data'][0]['players']['all_players'][playerIndex]['stats']['deaths']
-            players[playerIndex].kills = responseJson['data'][0]['players']['all_players'][playerIndex]['stats']['kills']
-            players[playerIndex].puuid = responseJson['data'][0]['players']['all_players'][playerIndex]['puuid']
-            players[playerIndex].teamColor = responseJson['data'][0]['players']['all_players'][playerIndex]['team']
+    mainMatch = Match()
+
+    set_match(players=mainPlayers, match=mainMatch)
+
+    # can begin creating database and 9 other API calls
+    database = Database()
+    currentPuuid = None
+    for playerIndex in range(5):
+        if (mainMatch.blueTeam[playerIndex].isUser == True):
+            continue
         else:
-            players[playerIndex].isUser = False
-            players[playerIndex].deaths = responseJson['data'][0]['players']['all_players'][playerIndex]['stats']['deaths']
-            players[playerIndex].kills = responseJson['data'][0]['players']['all_players'][playerIndex]['stats']['kills']
-            players[playerIndex].puuid = responseJson['data'][0]['players']['all_players'][playerIndex]['puuid']
-            players[playerIndex].teamColor = responseJson['data'][0]['players']['all_players'][playerIndex]['team']
+            response = requests.get('https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/'+userRegion+'/'+mainMatch.blueTeam[playerIndex].puuid+'?filter=competitive')
 
-    # Beginning match setup
-    match = Match()
-    blueCount = 0
-    redCount = 0
-    roundsWon = None
-    roundsLost = None
+            responseJson = response.json()
 
-    # Looping through players
-    for matchIndex in range(10):
-        if (players[matchIndex].teamColor == "Blue") :
-            match.blueTeam[blueCount] = players[matchIndex]
-            if (players[matchIndex].isUser == True) :
-                match.userTeamColor = "blue"
-                match.userIndex = blueCount
-            blueCount += 1
+            currentPuuid = mainMatch.blueTeam[playerIndex].puuid
+            
+            for tmpMatchIndex in range (1, 5):
+                for tmpPlayerIndex in range (10):
+                    if (responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid'] == currentPuuid):
+                        if (playerIndex == 0):
+                            database.b1[tmpMatchIndex - 1][0] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
+                            database.b1[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
+                            database.b1[tmpMatchIndex - 1][2] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['deaths']
+                            database.b1[tmpMatchIndex - 1][3] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team']
+                            database.b1[tmpMatchIndex - 1][4] = False
+                        elif (playerIndex == 1):
+                            database.b2[tmpMatchIndex - 1][0] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
+                            database.b2[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
+                            database.b2[tmpMatchIndex - 1][2] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['deaths']
+                            database.b2[tmpMatchIndex - 1][3] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team']
+                            database.b2[tmpMatchIndex - 1][4] = False
+                        elif (playerIndex == 2):
+                            database.b3[tmpMatchIndex - 1][0] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
+                            database.b3[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
+                            database.b3[tmpMatchIndex - 1][2] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['deaths']
+                            database.b3[tmpMatchIndex - 1][3] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team']
+                            database.b3[tmpMatchIndex - 1][4] = False
+                        elif (playerIndex == 3):
+                            database.b4[tmpMatchIndex - 1][0] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
+                            database.b4[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
+                            database.b4[tmpMatchIndex - 1][2] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['deaths']
+                            database.b4[tmpMatchIndex - 1][3] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team']
+                            database.b4[tmpMatchIndex - 1][4] = False
+                        else:
+                            database.b5[tmpMatchIndex - 1][0] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
+                            database.b5[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
+                            database.b5[tmpMatchIndex - 1][2] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['deaths']
+                            database.b5[tmpMatchIndex - 1][3] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team']
+                            database.b5[tmpMatchIndex - 1][4] = False
+
+    for playerIndex in range(5):
+        if (mainMatch.redTeam[playerIndex].isUser == True):
+            continue
         else:
-            match.redTeam[redCount] = players[matchIndex]
-            if (players[matchIndex].isUser == True) :
-                match.userTeamColor = "red"
-                match.userIndex = redCount
-            redCount += 1                 
+            response = requests.get('https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/'+userRegion+'/'+mainMatch.redTeam[playerIndex].puuid+'?filter=competitive')
+
+            responseJson = response.json()
+
+            currentPuuid = mainMatch.redTeam[playerIndex].puuid
+            
+            for tmpMatchIndex in range (1, 5):
+                for tmpPlayerIndex in range (10):
+                    if (responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid'] == currentPuuid):
+                        if (playerIndex == 0):
+                            database.r1[tmpMatchIndex - 1][0] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
+                            database.r1[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
+                            database.r1[tmpMatchIndex - 1][2] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['deaths']
+                            database.r1[tmpMatchIndex - 1][3] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team']
+                            database.r1[tmpMatchIndex - 1][4] = False
+                        elif (playerIndex == 1):
+                            database.r2[tmpMatchIndex - 1][0] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
+                            database.r2[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
+                            database.r2[tmpMatchIndex - 1][2] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['deaths']
+                            database.r2[tmpMatchIndex - 1][3] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team']
+                            database.r2[tmpMatchIndex - 1][4] = False
+                        elif (playerIndex == 2):
+                            database.r3[tmpMatchIndex - 1][0] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
+                            database.r3[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
+                            database.r3[tmpMatchIndex - 1][2] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['deaths']
+                            database.r3[tmpMatchIndex - 1][3] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team']
+                            database.r3[tmpMatchIndex - 1][4] = False
+                        elif (playerIndex == 3):
+                            database.r4[tmpMatchIndex - 1][0] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
+                            database.r4[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
+                            database.r4[tmpMatchIndex - 1][2] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['deaths']
+                            database.r4[tmpMatchIndex - 1][3] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team']
+                            database.r4[tmpMatchIndex - 1][4] = False
+                        else:
+                            database.r5[tmpMatchIndex - 1][0] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
+                            database.r5[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
+                            database.r5[tmpMatchIndex - 1][2] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['deaths']
+                            database.r5[tmpMatchIndex - 1][3] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team']
+                            database.r5[tmpMatchIndex - 1][4] = False
     
-    if (match.userTeamColor == "blue"):
-        roundsLost = responseJson['data'][0]['teams']['blue']['rounds_lost']
-        roundsWon = responseJson['data'][0]['teams']['blue']['rounds_won']
-    else:
-        roundsLost = responseJson['data'][0]['teams']['red']['rounds_lost']
-        roundsWon = responseJson['data'][0]['teams']['red']['rounds_won']
 
-    if (roundsLost > roundsWon):
-        match.userWinLoss = "Loss"
-    elif (roundsWon > roundsLost):
-        match.userWinLoss = "Win"
-    elif (roundsWon == roundsLost):
-        match.userWinLoss = "Draw"
 
-    print(match)
+            
+    print(database.b1)
+    print(database.b2)
+    print(database.b3)
+    print(database.b4)
+    print(database.b5)
+    print("=====================================================================================================================================================")
+    print(database.r1)
+    print(database.r2)
+    print(database.r3)
+    print(database.r4)
+    print(database.r5)
+            
