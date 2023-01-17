@@ -3,9 +3,7 @@ from player import Player
 from match import Match
 from database import Database
 import threading
-from concurrent.futures import ThreadPoolExecutor, as_completed
 import json
-import ctypes
 
 def set_players_array(players):
      for playerIndex in range(10):
@@ -61,18 +59,20 @@ def set_match(players, match):
     print(match)
     return match
 
+def get_match_hisory_json(URL, json_list, json_index):
+    response = requests.get(URL)
 
-def set_blue_data(database):
+    json_list[json_index] = response.json()
+
+def set_blue_data(database, json_list):
     for playerIndex in range(5):
         if (mainMatch.blueTeam[playerIndex].isUser == True):
             continue
         else:
-            response = requests.get('https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/'+userRegion+'/'+mainMatch.blueTeam[playerIndex].puuid+'?filter=competitive')
-
-            responseJson = response.json()
-
+           
             currentPuuid = mainMatch.blueTeam[playerIndex].puuid
-            
+            responseJson = json_list[playerIndex]
+
             for tmpMatchIndex in range (1, 5):
                 for tmpPlayerIndex in range (10):
                     if (responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid'] == currentPuuid):
@@ -86,7 +86,7 @@ def set_blue_data(database):
                                 database.b1[tmpMatchIndex - 1][3] = "Lost"
                             else:
                                 database.b1[tmpMatchIndex - 1][3] = "Draw"
-                            database.b1[tmpMatchIndex - 1][4] = False
+                            database.b1[tmpMatchIndex - 1][4] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
                         elif (playerIndex == 1):
                             database.b2[tmpMatchIndex - 1][0] = round(responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['damage_made'] / (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] + responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']), 1)
                             database.b2[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
@@ -97,7 +97,7 @@ def set_blue_data(database):
                                 database.b2[tmpMatchIndex - 1][3] = "Lost"
                             else:
                                 database.b2[tmpMatchIndex - 1][3] = "Draw" 
-                            database.b2[tmpMatchIndex - 1][4] = False
+                            database.b2[tmpMatchIndex - 1][4] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
                         elif (playerIndex == 2):
                             database.b3[tmpMatchIndex - 1][0] = round(responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['damage_made'] / (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] + responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']), 1)
                             database.b3[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
@@ -108,7 +108,7 @@ def set_blue_data(database):
                                 database.b3[tmpMatchIndex - 1][3] = "Lost"
                             else:
                                 database.b3[tmpMatchIndex - 1][3] = "Draw"
-                            database.b3[tmpMatchIndex - 1][4] = False
+                            database.b3[tmpMatchIndex - 1][4] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
                         elif (playerIndex == 3):
                             database.b4[tmpMatchIndex - 1][0] = round(responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['damage_made'] / (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] + responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']), 1)
                             database.b4[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
@@ -119,7 +119,7 @@ def set_blue_data(database):
                                 database.b4[tmpMatchIndex - 1][3] = "Lost"
                             else:
                                 database.b4[tmpMatchIndex - 1][3] = "Draw"
-                            database.b4[tmpMatchIndex - 1][4] = False
+                            database.b4[tmpMatchIndex - 1][4] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
                         else:
                             database.b5[tmpMatchIndex - 1][0] = round(responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['damage_made'] / (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] + responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']), 1)
                             database.b5[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
@@ -130,16 +130,15 @@ def set_blue_data(database):
                                 database.b5[tmpMatchIndex - 1][3] = "Lost"
                             else:
                                 database.b5[tmpMatchIndex - 1][3] = "Draw"
-                            database.b5[tmpMatchIndex - 1][4] = False
+                            database.b5[tmpMatchIndex - 1][4] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
 
-def set_red_data(database):
+def set_red_data(database, json_list):
     for playerIndex in range(5):
         if (mainMatch.redTeam[playerIndex].isUser == True):
             continue
         else:
-            response = requests.get('https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/'+userRegion+'/'+mainMatch.redTeam[playerIndex].puuid+'?filter=competitive')
 
-            responseJson = response.json()
+            responseJson = json_list[playerIndex + 5]
 
             currentPuuid = mainMatch.redTeam[playerIndex].puuid
             
@@ -156,7 +155,7 @@ def set_red_data(database):
                                 database.r1[tmpMatchIndex - 1][3] = "Lost"
                             else:
                                 database.r1[tmpMatchIndex - 1][3] = "Draw"
-                            database.r1[tmpMatchIndex - 1][4] = False
+                            database.r1[tmpMatchIndex - 1][4] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
                         elif (playerIndex == 1):
                             database.r2[tmpMatchIndex - 1][0] = round(responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['damage_made'] / (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] + responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']), 1)
                             database.r2[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
@@ -167,7 +166,7 @@ def set_red_data(database):
                                 database.r2[tmpMatchIndex - 1][3] = "Lost"
                             else:
                                 database.r2[tmpMatchIndex - 1][3] = "Draw"
-                            database.r2[tmpMatchIndex - 1][4] = False
+                            database.r2[tmpMatchIndex - 1][4] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
                         elif (playerIndex == 2):
                             database.r3[tmpMatchIndex - 1][0] = round(responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['damage_made'] / (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] + responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']), 1)
                             database.r3[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
@@ -178,7 +177,7 @@ def set_red_data(database):
                                 database.r3[tmpMatchIndex - 1][3] = "Lost"
                             else:
                                 database.r3[tmpMatchIndex - 1][3] = "Draw"
-                            database.r3[tmpMatchIndex - 1][4] = False
+                            database.r3[tmpMatchIndex - 1][4] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
                         elif (playerIndex == 3):
                             database.r4[tmpMatchIndex - 1][0] = round(responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['damage_made'] / (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] + responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']), 1)
                             database.r4[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
@@ -189,7 +188,7 @@ def set_red_data(database):
                                 database.r4[tmpMatchIndex - 1][3] = "Lost"
                             else:
                                 database.r4[tmpMatchIndex - 1][3] = "Draw"
-                            database.r4[tmpMatchIndex - 1][4] = False
+                            database.r4[tmpMatchIndex - 1][4] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
                         else:
                             database.r5[tmpMatchIndex - 1][0] = round(responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['damage_made'] / (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] + responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']), 1)
                             database.r5[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
@@ -200,13 +199,8 @@ def set_red_data(database):
                                 database.r5[tmpMatchIndex - 1][3] = "Lost"
                             else:
                                 database.r5[tmpMatchIndex - 1][3] = "Draw"
-                            database.r5[tmpMatchIndex - 1][4] = False
+                            database.r5[tmpMatchIndex - 1][4] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
 
-def runner():
-    threads = []
-    with ThreadPoolExecutor(max_workers=20) as executor:
-        threads.append(executor.submit(set_blue_data,database))
-        threads.append(executor.submit(set_red_data,database))
 
 # First task is to ask for user Information
 userInput = input("Enter Riot ID (\"example#0000\"): ")
@@ -252,8 +246,6 @@ else:
     print("\"" + userName + "\"")
     print("\"" + userTag + "\"")
     print("\"" + userRegion + "\"")
-
-
     # userTag and userName should be good to use now
 
 
@@ -285,11 +277,50 @@ if (validInput != 0):
 
     # can begin creating database and 9 other API calls
     database = Database()
-
-    runner()
-
-
+    url_list = [None] * 10
     
+    for playerIndex in range(10):
+        if (playerIndex <= 4):
+            url = 'https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/'+userRegion+'/'+mainMatch.blueTeam[playerIndex].puuid+'?filter=competitive'
+            url_list[playerIndex] = url
+        else:
+            url = 'https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/'+userRegion+'/'+mainMatch.redTeam[playerIndex - 5].puuid+'?filter=competitive'
+            url_list[playerIndex] = url
+
+    json_list = [None] * 10
+
+    threads = []
+
+    t1 = threading.Thread(target = get_match_hisory_json, args = (url_list[0], json_list, 0))
+    threads.append(t1)
+    t2 = threading.Thread(target = get_match_hisory_json, args = (url_list[1], json_list, 1))
+    threads.append(t2)
+    t3 = threading.Thread(target = get_match_hisory_json, args = (url_list[2], json_list, 2))
+    threads.append(t3)
+    t4 = threading.Thread(target = get_match_hisory_json, args = (url_list[3], json_list, 3))
+    threads.append(t4)
+    t5 = threading.Thread(target = get_match_hisory_json, args = (url_list[4], json_list, 4))
+    threads.append(t5)
+    t6 = threading.Thread(target = get_match_hisory_json, args = (url_list[5], json_list, 5))
+    threads.append(t6)
+    t7 = threading.Thread(target = get_match_hisory_json, args = (url_list[6], json_list, 6))
+    threads.append(t7)
+    t8 = threading.Thread(target = get_match_hisory_json, args = (url_list[7], json_list, 7))
+    threads.append(t8)
+    t9 = threading.Thread(target = get_match_hisory_json, args = (url_list[8], json_list, 8))
+    threads.append(t9)
+    t10 = threading.Thread(target = get_match_hisory_json, args = (url_list[9], json_list, 9))
+    threads.append(t10)
+
+    for x in threads:
+        x.start()
+        
+    for x in threads:
+        x.join()
+
+    set_blue_data(database, json_list)
+    set_red_data(database, json_list)
+
     print(database.b1)
     print(database.b2)
     print(database.b3)
