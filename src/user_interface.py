@@ -80,57 +80,97 @@ def set_blue_data(database, json_list):
                             database.b1[tmpMatchIndex - 1][0] = round(responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['damage_made'] / (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] + responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']), 1)
                             database.b1[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
                             database.b1[tmpMatchIndex - 1][2] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['deaths']
-                            if (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
-                                database.b1[tmpMatchIndex - 1][3] = "Won"
-                            elif (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] < responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
-                                database.b1[tmpMatchIndex - 1][3] = "Lost"
-                            else:
-                                database.b1[tmpMatchIndex - 1][3] = "Draw"
-                            database.b1[tmpMatchIndex - 1][4] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
+                            if (responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team'] == "Blue"):
+                                if (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
+                                    database.b1[tmpMatchIndex - 1][3] = "Won"
+                                elif (responseJson['data'][tmpMatchIndex]['teams']['blue']['has_won'] < responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
+                                    database.b1[tmpMatchIndex - 1][3] = "Lost"
+                                else:
+                                    database.b1[tmpMatchIndex - 1][3] = "Draw"
+                            elif (responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team'] == "Red"):
+                                if (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
+                                    database.b1[tmpMatchIndex - 1][3] = "Won"
+                                elif (responseJson['data'][tmpMatchIndex]['teams']['red']['has_won'] < responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
+                                    database.b1[tmpMatchIndex - 1][3] = "Lost"
+                                else:
+                                    database.b1[tmpMatchIndex - 1][3] = "Draw"
+                            
                         elif (playerIndex == 1):
                             database.b2[tmpMatchIndex - 1][0] = round(responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['damage_made'] / (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] + responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']), 1)
                             database.b2[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
                             database.b2[tmpMatchIndex - 1][2] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['deaths']
-                            if (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
-                                database.b2[tmpMatchIndex - 1][3] = "Won"
-                            elif (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] < responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
-                                database.b2[tmpMatchIndex - 1][3] = "Lost"
-                            else:
-                                database.b2[tmpMatchIndex - 1][3] = "Draw" 
-                            database.b2[tmpMatchIndex - 1][4] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
+                            if (responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team'] == "Blue"):
+                                if (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
+                                    database.b2[tmpMatchIndex - 1][3] = "Won"
+                                elif (responseJson['data'][tmpMatchIndex]['teams']['blue']['has_won'] < responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
+                                    database.b2[tmpMatchIndex - 1][3] = "Lost"
+                                else:
+                                    database.b2[tmpMatchIndex - 1][3] = "Draw"
+                            elif (responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team'] == "Red"):
+                                if (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
+                                    database.b2[tmpMatchIndex - 1][3] = "Won"
+                                elif (responseJson['data'][tmpMatchIndex]['teams']['red']['has_won'] < responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
+                                    database.b2[tmpMatchIndex - 1][3] = "Lost"
+                                else:
+                                    database.b2[tmpMatchIndex - 1][3] = "Draw"
+                            
                         elif (playerIndex == 2):
                             database.b3[tmpMatchIndex - 1][0] = round(responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['damage_made'] / (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] + responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']), 1)
                             database.b3[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
                             database.b3[tmpMatchIndex - 1][2] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['deaths']
-                            if (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
-                                database.b3[tmpMatchIndex - 1][3] = "Won"
-                            elif (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] < responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
-                                database.b3[tmpMatchIndex - 1][3] = "Lost"
-                            else:
-                                database.b3[tmpMatchIndex - 1][3] = "Draw"
-                            database.b3[tmpMatchIndex - 1][4] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
+                            if (responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team'] == "Blue"):
+                                if (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
+                                    database.b3[tmpMatchIndex - 1][3] = "Won"
+                                elif (responseJson['data'][tmpMatchIndex]['teams']['blue']['has_won'] < responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
+                                    database.b3[tmpMatchIndex - 1][3] = "Lost"
+                                else:
+                                    database.b3[tmpMatchIndex - 1][3] = "Draw"
+                            elif (responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team'] == "Red"):
+                                if (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
+                                    database.b3[tmpMatchIndex - 1][3] = "Won"
+                                elif (responseJson['data'][tmpMatchIndex]['teams']['red']['has_won'] < responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
+                                    database.b3[tmpMatchIndex - 1][3] = "Lost"
+                                else:
+                                    database.b3[tmpMatchIndex - 1][3] = "Draw"
+                            
                         elif (playerIndex == 3):
                             database.b4[tmpMatchIndex - 1][0] = round(responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['damage_made'] / (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] + responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']), 1)
                             database.b4[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
                             database.b4[tmpMatchIndex - 1][2] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['deaths']
-                            if (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
-                                database.b4[tmpMatchIndex - 1][3] = "Won"
-                            elif (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] < responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
-                                database.b4[tmpMatchIndex - 1][3] = "Lost"
-                            else:
-                                database.b4[tmpMatchIndex - 1][3] = "Draw"
-                            database.b4[tmpMatchIndex - 1][4] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
+                            if (responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team'] == "Blue"):
+                                if (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
+                                    database.b4[tmpMatchIndex - 1][3] = "Won"
+                                elif (responseJson['data'][tmpMatchIndex]['teams']['blue']['has_won'] < responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
+                                    database.b4[tmpMatchIndex - 1][3] = "Lost"
+                                else:
+                                    database.b4[tmpMatchIndex - 1][3] = "Draw"
+                            elif (responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team'] == "Red"):
+                                if (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
+                                    database.b4[tmpMatchIndex - 1][3] = "Won"
+                                elif (responseJson['data'][tmpMatchIndex]['teams']['red']['has_won'] < responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
+                                    database.b4[tmpMatchIndex - 1][3] = "Lost"
+                                else:
+                                    database.b4[tmpMatchIndex - 1][3] = "Draw"
+                            
                         else:
                             database.b5[tmpMatchIndex - 1][0] = round(responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['damage_made'] / (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] + responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']), 1)
                             database.b5[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
                             database.b5[tmpMatchIndex - 1][2] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['deaths']
-                            if (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
-                                database.b5[tmpMatchIndex - 1][3] = "Won"
-                            elif (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] < responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
-                                database.b5[tmpMatchIndex - 1][3] = "Lost"
-                            else:
-                                database.b5[tmpMatchIndex - 1][3] = "Draw"
-                            database.b5[tmpMatchIndex - 1][4] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
+                            if (responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team'] == "Blue"):
+                                if (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
+                                    database.b5[tmpMatchIndex - 1][3] = "Won"
+                                elif (responseJson['data'][tmpMatchIndex]['teams']['blue']['has_won'] < responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
+                                    database.b5[tmpMatchIndex - 1][3] = "Lost"
+                                else:
+                                    database.b5[tmpMatchIndex - 1][3] = "Draw"
+                            elif (responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team'] == "Red"):
+                                if (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
+                                    database.b5[tmpMatchIndex - 1][3] = "Won"
+                                elif (responseJson['data'][tmpMatchIndex]['teams']['red']['has_won'] < responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
+                                    database.b5[tmpMatchIndex - 1][3] = "Lost"
+                                else:
+                                    database.b5[tmpMatchIndex - 1][3] = "Draw"
+                            
 
 def set_red_data(database, json_list):
     for playerIndex in range(5):
@@ -148,58 +188,96 @@ def set_red_data(database, json_list):
                             database.r1[tmpMatchIndex - 1][0] = round(responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['damage_made'] / (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] + responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']), 1)
                             database.r1[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
                             database.r1[tmpMatchIndex - 1][2] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['deaths']
-                            if (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
-                                database.r1[tmpMatchIndex - 1][3] = "Won"
-                            elif (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] < responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
-                                database.r1[tmpMatchIndex - 1][3] = "Lost"
-                            else:
-                                database.r1[tmpMatchIndex - 1][3] = "Draw"
-                            database.r1[tmpMatchIndex - 1][4] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
+                            if (responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team'] == "Blue"):
+                                if (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
+                                    database.r1[tmpMatchIndex - 1][3] = "Won"
+                                elif (responseJson['data'][tmpMatchIndex]['teams']['blue']['has_won'] < responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
+                                    database.r1[tmpMatchIndex - 1][3] = "Lost"
+                                else:
+                                    database.r1[tmpMatchIndex - 1][3] = "Draw"
+                            elif (responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team'] == "Red"):
+                                if (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
+                                    database.r1[tmpMatchIndex - 1][3] = "Won"
+                                elif (responseJson['data'][tmpMatchIndex]['teams']['red']['has_won'] < responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
+                                    database.r1[tmpMatchIndex - 1][3] = "Lost"
+                                else:
+                                    database.r1[tmpMatchIndex - 1][3] = "Draw"
+                            
                         elif (playerIndex == 1):
                             database.r2[tmpMatchIndex - 1][0] = round(responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['damage_made'] / (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] + responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']), 1)
                             database.r2[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
                             database.r2[tmpMatchIndex - 1][2] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['deaths']
-                            if (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
-                                database.r2[tmpMatchIndex - 1][3] = "Won"
-                            elif (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] < responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
-                                database.r2[tmpMatchIndex - 1][3] = "Lost"
-                            else:
-                                database.r2[tmpMatchIndex - 1][3] = "Draw"
-                            database.r2[tmpMatchIndex - 1][4] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
+                            if (responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team'] == "Blue"):
+                                if (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
+                                    database.r2[tmpMatchIndex - 1][3] = "Won"
+                                elif (responseJson['data'][tmpMatchIndex]['teams']['blue']['has_won'] < responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
+                                    database.r2[tmpMatchIndex - 1][3] = "Lost"
+                                else:
+                                    database.r2[tmpMatchIndex - 1][3] = "Draw"
+                            elif (responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team'] == "Red"):
+                                if (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
+                                    database.r2[tmpMatchIndex - 1][3] = "Won"
+                                elif (responseJson['data'][tmpMatchIndex]['teams']['red']['has_won'] < responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
+                                    database.r2[tmpMatchIndex - 1][3] = "Lost"
+                                else:
+                                    database.r2[tmpMatchIndex - 1][3] = "Draw"
+                            
                         elif (playerIndex == 2):
                             database.r3[tmpMatchIndex - 1][0] = round(responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['damage_made'] / (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] + responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']), 1)
                             database.r3[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
                             database.r3[tmpMatchIndex - 1][2] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['deaths']
-                            if (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
-                                database.r3[tmpMatchIndex - 1][3] = "Won"
-                            elif (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] < responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
-                                database.r3[tmpMatchIndex - 1][3] = "Lost"
-                            else:
-                                database.r3[tmpMatchIndex - 1][3] = "Draw"
-                            database.r3[tmpMatchIndex - 1][4] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
+                            if (responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team'] == "Blue"):
+                                if (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
+                                    database.r3[tmpMatchIndex - 1][3] = "Won"
+                                elif (responseJson['data'][tmpMatchIndex]['teams']['blue']['has_won'] < responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
+                                    database.r3[tmpMatchIndex - 1][3] = "Lost"
+                                else:
+                                    database.r3[tmpMatchIndex - 1][3] = "Draw"
+                            elif (responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team'] == "Red"):
+                                if (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
+                                    database.r3[tmpMatchIndex - 1][3] = "Won"
+                                elif (responseJson['data'][tmpMatchIndex]['teams']['red']['has_won'] < responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
+                                    database.r3[tmpMatchIndex - 1][3] = "Lost"
+                                else:
+                                    database.r3[tmpMatchIndex - 1][3] = "Draw"
+            
                         elif (playerIndex == 3):
                             database.r4[tmpMatchIndex - 1][0] = round(responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['damage_made'] / (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] + responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']), 1)
                             database.r4[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
                             database.r4[tmpMatchIndex - 1][2] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['deaths']
-                            if (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
-                                database.r4[tmpMatchIndex - 1][3] = "Won"
-                            elif (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] < responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
-                                database.r4[tmpMatchIndex - 1][3] = "Lost"
-                            else:
-                                database.r4[tmpMatchIndex - 1][3] = "Draw"
-                            database.r4[tmpMatchIndex - 1][4] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
+                            if (responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team'] == "Blue"):
+                                if (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
+                                    database.r4[tmpMatchIndex - 1][3] = "Won"
+                                elif (responseJson['data'][tmpMatchIndex]['teams']['blue']['has_won'] < responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
+                                    database.r4[tmpMatchIndex - 1][3] = "Lost"
+                                else:
+                                    database.r4[tmpMatchIndex - 1][3] = "Draw"
+                            elif (responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team'] == "Red"):
+                                if (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
+                                    database.r4[tmpMatchIndex - 1][3] = "Won"
+                                elif (responseJson['data'][tmpMatchIndex]['teams']['red']['has_won'] < responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
+                                    database.r4[tmpMatchIndex - 1][3] = "Lost"
+                                else:
+                                    database.r4[tmpMatchIndex - 1][3] = "Draw"
+
                         else:
                             database.r5[tmpMatchIndex - 1][0] = round(responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['damage_made'] / (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] + responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']), 1)
                             database.r5[tmpMatchIndex - 1][1] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['kills']
                             database.r5[tmpMatchIndex - 1][2] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['stats']['deaths']
-                            if (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
-                                database.r5[tmpMatchIndex - 1][3] = "Won"
-                            elif (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] < responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
-                                database.r5[tmpMatchIndex - 1][3] = "Lost"
-                            else:
-                                database.r5[tmpMatchIndex - 1][3] = "Draw"
-                            database.r5[tmpMatchIndex - 1][4] = responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['puuid']
-
+                            if (responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team'] == "Blue"):
+                                if (responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
+                                    database.r5[tmpMatchIndex - 1][3] = "Won"
+                                elif (responseJson['data'][tmpMatchIndex]['teams']['blue']['has_won'] < responseJson['data'][tmpMatchIndex]['teams']['blue']['rounds_lost']):
+                                    database.r5[tmpMatchIndex - 1][3] = "Lost"
+                                else:
+                                    database.r5[tmpMatchIndex - 1][3] = "Draw"
+                            elif (responseJson['data'][tmpMatchIndex]['players']['all_players'][tmpPlayerIndex]['team'] == "Red"):
+                                if (responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_won'] > responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
+                                    database.r5[tmpMatchIndex - 1][3] = "Won"
+                                elif (responseJson['data'][tmpMatchIndex]['teams']['red']['has_won'] < responseJson['data'][tmpMatchIndex]['teams']['red']['rounds_lost']):
+                                    database.r5[tmpMatchIndex - 1][3] = "Lost"
+                                else:
+                                    database.r5[tmpMatchIndex - 1][3] = "Draw"
 
 # First task is to ask for user Information
 userInput = input("Enter Riot ID (\"example#0000\"): ")
