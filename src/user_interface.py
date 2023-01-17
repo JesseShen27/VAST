@@ -279,6 +279,7 @@ if (validInput != 0):
     database = Database()
     url_list = [None] * 10
     
+    # set url_list
     for playerIndex in range(10):
         if (playerIndex <= 4):
             url = 'https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/'+userRegion+'/'+mainMatch.blueTeam[playerIndex].puuid+'?filter=competitive'
@@ -289,6 +290,7 @@ if (validInput != 0):
 
     json_list = [None] * 10
 
+    # create one thread for each API call
     threads = []
 
     t1 = threading.Thread(target = get_match_hisory_json, args = (url_list[0], json_list, 0))
@@ -318,6 +320,7 @@ if (validInput != 0):
     for x in threads:
         x.join()
 
+    # threading finished, json_list complete, set database using json_list
     set_blue_data(database, json_list)
     set_red_data(database, json_list)
 
