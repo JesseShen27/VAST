@@ -139,7 +139,6 @@ def set_red_data(database, json_list):
         else:
 
             responseJson = json_list[playerIndex + 5]
-
             currentPuuid = mainMatch.redTeam[playerIndex].puuid
             
             for tmpMatchIndex in range (1, 5):
@@ -325,17 +324,7 @@ if (validInput != 0):
     set_blue_data(database, json_list)
     set_red_data(database, json_list)
 
-    print(database.b1)
-    print(database.b2)
-    print(database.b3)
-    print(database.b4)
-    print(database.b5)
-    print("=====================================================================================================================================================")
-    print(database.r1)
-    print(database.r2)
-    print(database.r3)
-    print(database.r4)
-    print(database.r5)
+    database.data_print()
     # database is setup
 
     # BEGIN MATH METHODS
