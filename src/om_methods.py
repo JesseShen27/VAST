@@ -1,12 +1,30 @@
-## fake database for function creations
+# Method that calculates average kd for the 4 games
+def average_KD(playerInGame):
+    totalKills = 0
+    totalDeaths = 0
+    averageKD = None
+    
+    # looping through each of the 4 games and adds to total kills and deaths
+    for players in range(4):
+        totalKills += playerInGame[players][1]
+        totalDeaths += playerInGame[players][2]
 
-pb1 = [[83158, 6, 3, 8, 3], [83158, 5, 8, 1, 8], [83158, 5, 9, 2, 1], [83158, 6, 3, 6, 3]]
-pb2 = [[83078, 7, 3, 9, 5], [83078, 3, 8, 5, 9], [83078, 3, 9, 1, 9], [83078, 9, 5, 1, 8]]
-pb3 = [[14145, 3, 7, 8, 6], [14145, 9, 6, 6, 6], [14145, 4, 7, 1, 1], [14145, 1, 7, 4, 5]]
-pb4 = [[38887, 3, 3, 9, 2], [38887, 8, 1, 2, 5], [38887, 4, 3, 9, 3], [38887, 1, 1, 9, 6]]
-pb5 = [[48675, 2, 4, 3, 5], [48675, 2, 7, 4, 4], [48675, 1, 2, 6, 7], [48675, 4, 1, 9, 1]]
-pr1 = [[95965, 1, 4, 4, 9], [95965, 6, 3, 4, 1], [95965, 5, 6, 6, 9], [95965, 7, 8, 9, 9]]
-pr2 = [[45408, 8, 5, 5, 3], [45408, 9, 6, 4, 5], [45408, 7, 7, 9, 6], [45408, 5, 1, 6, 8]]
-pr3 = [[79658, 6, 1, 7, 7], [79658, 9, 9, 2, 6], [79658, 9, 1, 1, 6], [79658, 3, 5, 9, 7]]
-pr4 = [[47280, 4, 1, 2, 1], [47280, 6, 6, 6, 8], [47280, 6, 4, 1, 9], [47280, 5, 4, 8, 3]] 
-pr5 = [[94152, 5, 1, 6, 6], [94152, 6, 2, 3, 6], [94152, 7, 4, 2, 8], [94152, 4, 6, 7, 6]]
+    averageKD = totalKills / totalDeaths
+    newAverage = round(averageKD, 1)
+    
+    return newAverage
+
+# Method that calculates a player's average ADR for the four games
+def average_ADR(playerInGame):
+    totalADR = 0
+    averageADR = None
+
+    # looping through each of the 4 games and adds to total ADR
+    for players in range(4):
+        totalADR += playerInGame[players][0]
+    
+    averageADR = totalADR / 4
+    newAverageADR = round(averageADR)
+
+    return newAverageADR
+

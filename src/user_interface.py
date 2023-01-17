@@ -1,4 +1,5 @@
 import requests
+from om_methods import *
 from player import Player
 from match import Match
 from database import Database
@@ -406,3 +407,21 @@ if (validInput != 0):
     # database is setup
 
     # BEGIN MATH METHODS
+    print('Average KD b1: ' + str(average_KD(database.b1)))
+    print('Average KD b2: ' + str(average_KD(database.b2)))
+    print('Average KD b3: ' + str(average_KD(database.b3)))
+    print('Average KD b5: ' + str(average_KD(database.b5)))
+    print('Average KD r1: ' + str(average_KD(database.r1)))
+    print('Average KD r2: ' + str(average_KD(database.r2)))
+    print('Average KD r3: ' + str(average_KD(database.r3)))
+    print('Average KD r4: ' + str(average_KD(database.r4)))
+    print('Average KD r5: ' + str(average_KD(database.r5)))
+    print('Average ADR b1: ' + str(average_ADR(database.b1)))
+    print('Average ADR b2: ' + str(average_ADR(database.b2)))
+    print('Average ADR b3: ' + str(average_ADR(database.b3)))
+    print('Average ADR b5: ' + str(average_ADR(database.b5)))
+    print('Average ADR r1: ' + str(average_ADR(database.r1)))
+    print('Average ADR r2: ' + str(average_ADR(database.r2)))
+    print('Average ADR r3: ' + str(average_ADR(database.r3)))
+    print('Average ADR r4: ' + str(average_ADR(database.r4)))
+    print('Average ADR r5: ' + str(average_ADR(database.r5)))
