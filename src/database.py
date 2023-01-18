@@ -12,15 +12,12 @@ class Database:
     self.r4 = [[None, None, None, None, None], [None, None, None, None, None], [None, None, None, None, None], [None, None, None, None, None]]
     self.r5 = [[None, None, None, None, None], [None, None, None, None, None], [None, None, None, None, None], [None, None, None, None, None]]
 
+    self.finalData = [self.b1, self.b2, self.b3, self.b4, self.b5, self.r1, self.r2, self.r3, self.r4, self.r5]
+
   def data_print(self):
-    print(self.b1)
-    print(self.b2)
-    print(self.b3)
-    print(self.b4)
-    print(self.b5)
-    print("==========================================================================================================================================================================================================================================================================================================")
-    print(self.r1)
-    print(self.r2)
-    print(self.r3)
-    print(self.r4)
-    print(self.r5)
+    print('Blue:')
+    for i in range(5):
+      print(self.finalData[i])
+    print('Red:')
+    for i in range(5, 10):
+      print(self.finalData[i])
