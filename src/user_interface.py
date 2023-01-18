@@ -308,7 +308,7 @@ def set_red_data(database, json_list):
 processContinue = True
 lastUserName: str = None
 lastUserTag: str = None
-user_cache_json = 'data0user.json'
+user_cache_json = 'cache/data0user.json'
 
 while (processContinue):
     # First task is to ask for user Information
@@ -415,16 +415,16 @@ while (processContinue):
         
         json_list = [None] * 10
 
-        json_cache1 = 'data1.json'
-        json_cache2 = 'data2.json'
-        json_cache3 = 'data3.json'
-        json_cache4 = 'data4.json'
-        json_cache5 = 'data5.json'
-        json_cache6 = 'data6.json'
-        json_cache7 = 'data7.json'
-        json_cache8 = 'data8.json'
-        json_cache9 = 'data9.json'
-        json_cache10 = 'data10.json'
+        json_cache1 = 'cache/data01.json'
+        json_cache2 = 'cache/data02.json'
+        json_cache3 = 'cache/data03.json'
+        json_cache4 = 'cache/data04.json'
+        json_cache5 = 'cache/data05.json'
+        json_cache6 = 'cache/data06.json'
+        json_cache7 = 'cache/data07.json'
+        json_cache8 = 'cache/data08.json'
+        json_cache9 = 'cache/data09.json'
+        json_cache10 = 'cache/data10.json'
 
         # need something that determines whether or not we want update probably want this to update every 10 minutes or something
         update: bool = False
@@ -487,6 +487,6 @@ while (processContinue):
 
         # BEGIN MATH METHODS
 
-    
-
+ cache/   
+0
 
