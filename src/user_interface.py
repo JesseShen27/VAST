@@ -486,6 +486,4 @@ while (processContinue):
 
         # BEGIN MATH METHODS
 
-    
-
 
