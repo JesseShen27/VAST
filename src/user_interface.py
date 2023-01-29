@@ -486,4 +486,4 @@ while (processContinue):
         # database is setup
 
         # BEGIN MATH METHODS
-
+        print("win percentage: " + str(win_percentage(database.b1)))
