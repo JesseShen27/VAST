@@ -28,3 +28,14 @@ def average_ADR(playerInGame):
 
     return newAverageADR
 
+def win_percentage(playerInGame):
+    wins = 0
+
+    for players in range(4):
+        if (playerInGame[players][3] == 'Won'):
+            wins += 1
+    
+    return wins/4 * 100
+
+        
+
