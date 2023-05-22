@@ -5,6 +5,7 @@ from match import Match
 from database import Database
 import threading
 import json
+import re
 
 # ------------------- METHODS USED DURING PROCESSING ---------------------------
 
@@ -309,6 +310,9 @@ processContinue = True
 lastUserName: str = None
 lastUserTag: str = None
 user_cache_json = 'src/cache/data0user.json'
+# regex for riot id
+pattern = r"^([A-Za-z0-9 ]{3,16})#([A-Za-z0-9]{3,5})$"
+reg = re.compile(pattern)
 
 while (processContinue):
     # First task is to ask for user Information
@@ -316,42 +320,49 @@ while (processContinue):
     if (userInput == "quit"):
         processContinue = False
         exit()
-    userRegion = input("Enter Region: (na, eu, ap, kr): ")
 
     # valid input == 0 if invalid, anything else means valid
     validInput = False
 
-    if (len(userInput) > 22 or len(userInput) < 8):
+    # checking id validity based on regex
+    if not reg.match(userInput):
         print("Invalid Riot ID")
     else:
-        # Riot ID max name length 16 chars
-        userName = ("%" * 16)
-        # Riot ID max tag length 5 chars
-        userTag = ("%" * 5)
+        userRegion = input("Enter Region: (na, eu, ap, kr): ")
+        # match group 1 username
+        userName = reg.match(userInput).group(1)
+        print(userName)
+        # match group 2 user tag
+        userTag = reg.match(userInput).group(2)
+        print(userTag)
+        # # Riot ID max name length 16 chars
+        # userName = ("%" * 16)
+        # # Riot ID max tag length 5 chars
+        # userTag = ("%" * 5)
 
         # Necessary Index values for string manipulation of tag and username
-        tagIndex = 0
-        nameIndex = 0
-        #loops through string looking for '#'
-        for i in range(len(userInput)):
-            # found '#' begin placing characters in tag
-            if (userInput[i] == "#"):
-                # loop to place characters from input into tag string
-                for j in range(len(userInput) - i - 1):
-                    # if to check for last index
-                    if (i == len(userInput) - 1):
-                        break
-                    else:
-                        userTag = userTag[:tagIndex] + userInput[i + j + 1] + userTag[tagIndex:]
-                        tagIndex += 1
-                break
-            # Otherwise place characters from input in username
-            else:
-                userName = userName[:nameIndex] + userInput[i] + userName[nameIndex:]
-                nameIndex += 1
+        # tagIndex = 0
+        # nameIndex = 0
+        # #loops through string looking for '#'
+        # for i in range(len(userInput)):
+        #     # found '#' begin placing characters in tag
+        #     if (userInput[i] == "#"):
+        #         # loop to place characters from input into tag string
+        #         for j in range(len(userInput) - i - 1):
+        #             # if to check for last index
+        #             if (i == len(userInput) - 1):
+        #                 break
+        #             else:
+        #                 userTag = userTag[:tagIndex] + userInput[i + j + 1] + userTag[tagIndex:]
+        #                 tagIndex += 1
+        #         break
+        #     # Otherwise place characters from input in username
+        #     else:
+        #         userName = userName[:nameIndex] + userInput[i] + userName[nameIndex:]
+        #         nameIndex += 1
 
-        userTag = userTag.strip("%")
-        userName = userName.strip("%")
+        # userTag = userTag.strip("%")
+        # userName = userName.strip("%")
         validInput = True
         # userTag and userName should be good to use now
 
