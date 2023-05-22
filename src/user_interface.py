@@ -1,5 +1,5 @@
 import requests
-from om_methods import *
+from dis_methods import *
 from player import Player
 from match import Match
 from database import Database
@@ -486,4 +486,4 @@ while (processContinue):
         # database is setup
 
         # BEGIN MATH METHODS
-        print("win percentage: " + str(win_percentage(database.b1)))
+        print("win percentage: " + str(win_percentage(database.b1)))    
