@@ -335,40 +335,11 @@ while (processContinue):
         # match group 2 user tag
         userTag = reg.match(userInput).group(2)
         print(userTag)
-        # # Riot ID max name length 16 chars
-        # userName = ("%" * 16)
-        # # Riot ID max tag length 5 chars
-        # userTag = ("%" * 5)
-
-        # Necessary Index values for string manipulation of tag and username
-        # tagIndex = 0
-        # nameIndex = 0
-        # #loops through string looking for '#'
-        # for i in range(len(userInput)):
-        #     # found '#' begin placing characters in tag
-        #     if (userInput[i] == "#"):
-        #         # loop to place characters from input into tag string
-        #         for j in range(len(userInput) - i - 1):
-        #             # if to check for last index
-        #             if (i == len(userInput) - 1):
-        #                 break
-        #             else:
-        #                 userTag = userTag[:tagIndex] + userInput[i + j + 1] + userTag[tagIndex:]
-        #                 tagIndex += 1
-        #         break
-        #     # Otherwise place characters from input in username
-        #     else:
-        #         userName = userName[:nameIndex] + userInput[i] + userName[nameIndex:]
-        #         nameIndex += 1
-
-        # userTag = userTag.strip("%")
-        # userName = userName.strip("%")
+        # Riot ID max name length 16 chars
         validInput = True
         # userTag and userName should be good to use now
 
-
     # api call for user
-
     if (validInput != 0):
 
         # caching first API call
