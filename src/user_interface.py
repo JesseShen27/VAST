@@ -451,8 +451,5 @@ def process_data(riotID, userRegion):
         for y in threads:
             y.join()
 
-        lastUserName = userName
-        lastUserTag = userTag
         # database is setup
-
         return database  
