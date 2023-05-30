@@ -306,7 +306,7 @@ def set_red_data(database, json_list, mainMatch):
 # --------------------- PROCESSING BEGINS HERE --------------------------------
 
 
-def process_data(riotID):
+def process_data(riotID, userRegion):
     # Vars that need to stay constant throughout process loops
     user_cache_json = 'src/cache/data0user.json'
     lastUserName: str = None
@@ -322,7 +322,6 @@ def process_data(riotID):
     if not reg.match(riotID):
         print("Invalid Riot ID")
     else:
-        userRegion = input("Enter Region: (na, eu, ap, kr): ")
         # match group 1 username
         userName = reg.match(riotID).group(1)
         print(userName)
@@ -337,13 +336,15 @@ def process_data(riotID):
     if (validInput != 0):
 
         # caching first API call
-        try:
-            with open(user_cache_json, 'r') as file:
-                json_data = json.load(file)
-                print('Fetched data from local cache')
-        except(FileNotFoundError, json.JSONDecodeError) as e:
-            print(f'No local cache found... ({e})')
-            json_data = None
+
+        #try:
+            #with open(user_cache_json, 'r') as file:
+                #json_data = json.load(file)
+                #print('Fetched data from local cache')
+        #except(FileNotFoundError, json.JSONDecodeError) as e:
+            #print(f'No local cache found... ({e})')
+            #json_data = None
+        json_data = None
     
         if not json_data:
             print('Fetching new json data... (Updating local cache)')
@@ -456,11 +457,8 @@ def process_data(riotID):
 
         return database  
        
-database1 = process_data("bolo500#5479")
+database1 = process_data("clu1#NA1", "na")
+
+database1.data_print
 
 print('Win percentage of b1: ' + str(win_percentage(database1.b1)))
-
-
-
-
-    
