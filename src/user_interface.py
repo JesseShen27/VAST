@@ -456,9 +456,3 @@ def process_data(riotID, userRegion):
         # database is setup
 
         return database  
-       
-database1 = process_data("clu1#NA1", "na")
-
-database1.data_print
-
-print('Win percentage of b1: ' + str(win_percentage(database1.b1)))
