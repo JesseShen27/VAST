@@ -9,7 +9,7 @@ import re
 
 # ------------------- METHODS USED DURING PROCESSING ---------------------------
 
-def set_players_array(players):
+def set_players_array(players, responseJson, userName):
      for playerIndex in range(10):
         if (responseJson['data'][0]['players']['all_players'][playerIndex]['name'] == userName and responseJson['data'][0]['players']['all_players'][playerIndex]['tag']):
             players[playerIndex].isUser = True
@@ -24,7 +24,7 @@ def set_players_array(players):
             players[playerIndex].puuid = responseJson['data'][0]['players']['all_players'][playerIndex]['puuid']
             players[playerIndex].teamColor = responseJson['data'][0]['players']['all_players'][playerIndex]['team']
 
-def set_match(players, match):
+def set_match(players, match, responseJson):
     # Beginning match setup
     blueCount = 0
     redCount = 0
@@ -92,7 +92,7 @@ def get_match_hisory_json(url):
     return response.json()
 
 # ----------------------- BLUE DATABASE SETUP --------------------------------
-def set_blue_data(database, json_list):
+def set_blue_data(database, json_list, mainMatch):
     for playerIndex in range(5):
 
         currentPuuid = mainMatch.blueTeam[playerIndex].puuid
@@ -197,7 +197,7 @@ def set_blue_data(database, json_list):
                                     database.b5[tmpMatchIndex - 1][3] = "Draw"    
                             
 # ----------------------- RED DATABASE SETUP --------------------------------
-def set_red_data(database, json_list):
+def set_red_data(database, json_list, mainMatch):
     for playerIndex in range(5):
         
         responseJson = json_list[playerIndex + 5]
@@ -305,35 +305,31 @@ def set_red_data(database, json_list):
 
 # --------------------- PROCESSING BEGINS HERE --------------------------------
 
-# Vars that need to stay constant throughout process loops
-processContinue = True
-lastUserName: str = None
-lastUserTag: str = None
-user_cache_json = 'src/cache/data0user.json'
-# regex for riot id
-pattern = r"^([A-Za-z0-9 ]{3,16})#([A-Za-z0-9]{3,5})$"
-reg = re.compile(pattern)
 
-while (processContinue):
-    # First task is to ask for user Information
-    userInput = input("Enter Riot ID (\"example#0000\") or 'quit': ")
-    if (userInput == "quit"):
-        processContinue = False
-        exit()
+def process_data(riotID):
+    # Vars that need to stay constant throughout process loops
+    user_cache_json = 'src/cache/data0user.json'
+    lastUserName: str = None
+    lastUserTag: str = None
+    # regex for riot id
+    pattern = r"^([A-Za-z0-9 ]{3,16})#([A-Za-z0-9]{3,5})$"
+    reg = re.compile(pattern)
+
+
 
     # valid input == 0 if invalid, anything else means valid
     validInput = False
 
     # checking id validity based on regex
-    if not reg.match(userInput):
+    if not reg.match(riotID):
         print("Invalid Riot ID")
     else:
         userRegion = input("Enter Region: (na, eu, ap, kr): ")
         # match group 1 username
-        userName = reg.match(userInput).group(1)
+        userName = reg.match(riotID).group(1)
         print(userName)
         # match group 2 user tag
-        userTag = reg.match(userInput).group(2)
+        userTag = reg.match(riotID).group(2)
         print(userTag)
         # Riot ID max name length 16 chars
         validInput = True
@@ -343,16 +339,13 @@ while (processContinue):
     if (validInput != 0):
 
         # caching first API call
-        if ((userTag != lastUserTag) or (userName != lastUserName)):
+        try:
+            with open(user_cache_json, 'r') as file:
+                json_data = json.load(file)
+                print('Fetched data from local cache')
+        except(FileNotFoundError, json.JSONDecodeError) as e:
+            print(f'No local cache found... ({e})')
             json_data = None
-        else:
-            try:
-                with open(user_cache_json, 'r') as file:
-                    json_data_orig = json.load(file)
-                    print('Fetched data from local cache')
-            except(FileNotFoundError, json.JSONDecodeError) as e:
-                print(f'No local cache found... ({e})')
-                json_data_orig = None
     
         if not json_data:
             print('Fetching new json data... (Updating local cache)')
@@ -375,11 +368,11 @@ while (processContinue):
         player10 = Player()
         mainPlayers = [player1, player2, player3, player4, player5 ,player6 ,player7 ,player8 ,player9 ,player10]
 
-        set_players_array(players=mainPlayers)
+        set_players_array(players=mainPlayers, responseJson=responseJson, userName=userName)
 
         mainMatch = Match()
 
-        set_match(players=mainPlayers, match=mainMatch)
+        set_match(players=mainPlayers, match=mainMatch, responseJson=responseJson)
 
         # can begin creating database and 9 other API calls
         database = Database()
@@ -448,9 +441,9 @@ while (processContinue):
 
         threads2 = []
 
-        th1 = threading.Thread(target= set_blue_data, args=(database, json_list))
+        th1 = threading.Thread(target= set_blue_data, args=(database, json_list, mainMatch))
         threads2.append(th1)
-        th2 = threading.Thread(target= set_red_data, args=(database, json_list))
+        th2 = threading.Thread(target= set_red_data, args=(database, json_list, mainMatch))
         threads2.append(th2)
 
         # threading finished, json_list is updated and can begin database setting
@@ -461,11 +454,18 @@ while (processContinue):
         for y in threads:
             y.join()
 
-        database.data_print()
-
         lastUserName = userName
         lastUserTag = userTag
         # database is setup
 
         # BEGIN MATH METHODS
-        print("win percentage: " + str(win_percentage(database.b1)))    
+        return database  
+       
+database1 = process_data("bolo500#5479")
+
+print('Win percentage of b1: ' + str(win_percentage(database1.b1)))
+
+
+
+
+    
