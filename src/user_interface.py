@@ -315,8 +315,6 @@ def process_data(riotID):
     pattern = r"^([A-Za-z0-9 ]{3,16})#([A-Za-z0-9]{3,5})$"
     reg = re.compile(pattern)
 
-
-
     # valid input == 0 if invalid, anything else means valid
     validInput = False
 
@@ -387,7 +385,6 @@ def process_data(riotID):
                 url = 'https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/'+userRegion+'/'+mainMatch.redTeam[playerIndex - 5].puuid+'?filter=competitive'
                 url_list[playerIndex] = url
 
-        
         json_list = [None] * 10
 
         json_cache1 = 'src/cache/data01.json'
@@ -447,7 +444,6 @@ def process_data(riotID):
         threads2.append(th2)
 
         # threading finished, json_list is updated and can begin database setting
-
         for y in threads2:
             y.start()
         
@@ -458,7 +454,6 @@ def process_data(riotID):
         lastUserTag = userTag
         # database is setup
 
-        # BEGIN MATH METHODS
         return database  
        
 database1 = process_data("bolo500#5479")
