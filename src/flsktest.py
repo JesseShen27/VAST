@@ -3,12 +3,8 @@ from user_interface import *
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods=["POST", "GET"])
 def home():
-    return render_template("index.html")
-
-@app.route("/login", methods=["POST", "GET"])
-def login():
     if request.method == "POST":
         # we have the user inputted data now stored in the user and region variables
         user = request.form["nm"]
