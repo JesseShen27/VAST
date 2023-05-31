@@ -24,7 +24,7 @@ def login():
         kd = round(kd, 2)
         kdstr = str(kd)
 
-        print("Database set successfully for \'" + user + "\'.\nTo check data use code \'database1.data_print\'")
+        print("Database set successfully for \'" + user + "\'.\nTo check data use code \'database1.data_print()\'")
         print("================finished processing=================")
         return redirect(url_for("user", usr=user, kd=kdstr))
     else:
