@@ -60,11 +60,10 @@ def set_match(players, match, responseJson):
     elif (roundsWon == roundsLost):
         match.userWinLoss = "Draw"
 
-    print(match)
     return match
 
 # ------------------------- CACHE METHOD ------------------------------------
-def fetch_data(update, json_cache, url, json_list, json_index):
+def fetch_data(url, json_list, json_index):
     json_data = get_match_hisory_json(url)
     json_list[json_index] = json_data
 
@@ -292,9 +291,6 @@ def set_red_data(database, json_list, mainMatch):
 
 def process_data(riotID, userRegion):
     # Vars that need to stay constant throughout process loops
-    user_cache_json = 'src/cache/data0user.json'
-    lastUserName: str = None
-    lastUserTag: str = None
     # regex for riot id
     pattern = r"^([A-Za-z0-9 ]{3,16})#([A-Za-z0-9]{3,5})$"
     reg = re.compile(pattern)
@@ -306,6 +302,7 @@ def process_data(riotID, userRegion):
     if not reg.match(riotID):
         print("Invalid Riot ID")
     else:
+        print("================processing...=================")
         # match group 1 username
         userName = reg.match(riotID).group(1)
         print(userName)
@@ -319,25 +316,10 @@ def process_data(riotID, userRegion):
     # api call for user
     if (validInput != 0):
 
-        # caching first API call
-
-        #try:
-            #with open(user_cache_json, 'r') as file:
-                #json_data = json.load(file)
-                #print('Fetched data from local cache')
-        #except(FileNotFoundError, json.JSONDecodeError) as e:
-            #print(f'No local cache found... ({e})')
-            #json_data = None
-        json_data = None
-    
-        if not json_data:
-            print('Fetching new json data... (Updating local cache)')
-            json_data = requests.get('https://api.henrikdev.xyz/valorant/v3/matches/'+userRegion+'/'+userName+'/'+userTag+'?filter=competitive')
-            json_data = json_data.json()
-            with open(user_cache_json, 'w') as file:
-                json.dump(json_data, file)
-
-        responseJson = json_data
+        print("Setting up data for most recent match...")
+  
+        json_data = requests.get('https://api.henrikdev.xyz/valorant/v3/matches/'+userRegion+'/'+userName+'/'+userTag+'?filter=competitive')
+        responseJson = json_data.json()
 
         player1 = Player()
         player2 = Player()
@@ -356,9 +338,12 @@ def process_data(riotID, userRegion):
         mainMatch = Match()
 
         set_match(players=mainPlayers, match=mainMatch, responseJson=responseJson)
+        print("Most recent match set\nSetting up database...")
 
         # can begin creating database and 9 other API calls
         database = Database()
+        database.match = mainMatch
+
         url_list = [None] * 10
         
         # settting URL list
@@ -372,47 +357,29 @@ def process_data(riotID, userRegion):
 
         json_list = [None] * 10
 
-        json_cache1 = 'src/cache/data01.json'
-        json_cache2 = 'src/cache/data02.json'
-        json_cache3 = 'src/cache/data03.json'
-        json_cache4 = 'src/cache/data04.json'
-        json_cache5 = 'src/cache/data05.json'
-        json_cache6 = 'src/cache/data06.json'
-        json_cache7 = 'src/cache/data07.json'
-        json_cache8 = 'src/cache/data08.json'
-        json_cache9 = 'src/cache/data09.json'
-        json_cache10 = 'src/cache/data10.json'
-
-        # need something that determines whether or not we want update probably want this to update every 10 minutes or something
-        update: bool = False
-        if ((lastUserName == userName) and (lastUserTag == userTag)):
-            update = False
-        else:
-            update = True
-
         # setting threads list
         threads = []
 
         # def fetch_data(update, json_cache, url, json_list, json_index):
-        t1 = threading.Thread(target = fetch_data, args = (update, json_cache1, url_list[0], json_list, 0))
+        t1 = threading.Thread(target = fetch_data, args = (url_list[0], json_list, 0))
         threads.append(t1)
-        t2 = threading.Thread(target = fetch_data, args = (update, json_cache2, url_list[1], json_list, 1))
+        t2 = threading.Thread(target = fetch_data, args = (url_list[1], json_list, 1))
         threads.append(t2)
-        t3 = threading.Thread(target = fetch_data, args = (update, json_cache3, url_list[2], json_list, 2))
+        t3 = threading.Thread(target = fetch_data, args = (url_list[2], json_list, 2))
         threads.append(t3)
-        t4 = threading.Thread(target = fetch_data, args = (update, json_cache4, url_list[3], json_list, 3))
+        t4 = threading.Thread(target = fetch_data, args = (url_list[3], json_list, 3))
         threads.append(t4)
-        t5 = threading.Thread(target = fetch_data, args = (update, json_cache5, url_list[4], json_list, 4))
+        t5 = threading.Thread(target = fetch_data, args = (url_list[4], json_list, 4))
         threads.append(t5)
-        t6 = threading.Thread(target = fetch_data, args = (update, json_cache6, url_list[5], json_list, 5))
+        t6 = threading.Thread(target = fetch_data, args = (url_list[5], json_list, 5))
         threads.append(t6)
-        t7 = threading.Thread(target = fetch_data, args = (update, json_cache7, url_list[6], json_list, 6))
+        t7 = threading.Thread(target = fetch_data, args = (url_list[6], json_list, 6))
         threads.append(t7)
-        t8 = threading.Thread(target = fetch_data, args = (update, json_cache8, url_list[7], json_list, 7))
+        t8 = threading.Thread(target = fetch_data, args = (url_list[7], json_list, 7))
         threads.append(t8)
-        t9 = threading.Thread(target = fetch_data, args = (update, json_cache9, url_list[8], json_list, 8))
+        t9 = threading.Thread(target = fetch_data, args = (url_list[8], json_list, 8))
         threads.append(t9)
-        t10 = threading.Thread(target = fetch_data, args = (update, json_cache10, url_list[9], json_list, 9))
+        t10 = threading.Thread(target = fetch_data, args = (url_list[9], json_list, 9))
         threads.append(t10)
 
         for x in threads:
