@@ -1,3 +1,4 @@
+from match import Match
 class Database:
   def __init__(self):
     self.b1 = [[None, None, None, None, None], [None, None, None, None, None], [None, None, None, None, None], [None, None, None, None, None]]
@@ -12,7 +13,7 @@ class Database:
     self.r4 = [[None, None, None, None, None], [None, None, None, None, None], [None, None, None, None, None], [None, None, None, None, None]]
     self.r5 = [[None, None, None, None, None], [None, None, None, None, None], [None, None, None, None, None], [None, None, None, None, None]]
 
-    self.match = None
+    self.match = Match()
 
     self.finalData = [self.b1, self.b2, self.b3, self.b4, self.b5, self.r1, self.r2, self.r3, self.r4, self.r5]
 
