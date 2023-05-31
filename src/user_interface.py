@@ -65,23 +65,7 @@ def set_match(players, match, responseJson):
 
 # ------------------------- CACHE METHOD ------------------------------------
 def fetch_data(update, json_cache, url, json_list, json_index):
-    if update:
-        json_data = None
-    else:
-        try:
-            with open(json_cache, 'r') as file:
-                json_data = json.load(file)
-                print('Fetched data from local cache')
-        except(FileNotFoundError, json.JSONDecodeError) as e:
-            print(f'No local cache found... ({e})')
-            json_data = None
-    
-    if not json_data:
-        print('Fetching new json data... (Updating local cache)')
-        json_data = get_match_hisory_json(url)
-        with open(json_cache, 'w') as file:
-            json.dump(json_data, file)
-    
+    json_data = get_match_hisory_json(url)
     json_list[json_index] = json_data
 
 
@@ -448,7 +432,7 @@ def process_data(riotID, userRegion):
         for y in threads2:
             y.start()
         
-        for y in threads:
+        for y in threads2:
             y.join()
 
         # database is setup

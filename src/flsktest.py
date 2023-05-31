@@ -14,6 +14,7 @@ def login():
         user = request.form["nm"]
         region = request.form["region"]
         database1 = process_data(user, region)
+        print("database for \'" + user + "\' set up")
         b1_avg_wr = str(win_percentage(database1.b1))
         return redirect(url_for("user", usr = user, region = region))
     else:
