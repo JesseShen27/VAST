@@ -62,7 +62,7 @@ def set_match(players, match, responseJson):
 
     return match
 
-# ------------------------- CACHE METHOD ------------------------------------
+# ------------------------- Grab match history and update json_list ------------------------------------
 def fetch_data(url, json_list, json_index):
     json_data = get_match_hisory_json(url)
     json_list[json_index] = json_data
@@ -300,7 +300,7 @@ def process_data(riotID, userRegion):
 
     # checking id validity based on regex
     if not reg.match(riotID):
-        print("Invalid Riot ID")
+        return None
     else:
         print("================processing...=================")
         # match group 1 username

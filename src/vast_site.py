@@ -10,6 +10,11 @@ def home():
         user = request.form["nm"]
         region = request.form["region"]
         database1 = process_data(user, region)
+
+
+        if (database1 == None):
+            return redirect(url_for("user", usr="Invalid", kd="Error"))
+
         user_index = database1.match.userIndex
 
         if (database1.match.userTeamColor == 'blue'):
@@ -28,6 +33,10 @@ def home():
 
 @app.route("/<usr>/<kd>")
 def user(usr, kd):
+
+    if (usr == "Invalid"):
+        return "<h1>Invalid riot ID or region</h1>"
+
     return "<h1>" + usr + "\'s most recent match kd: " + kd + "</h1>"
 
 if __name__ == "__main__":
