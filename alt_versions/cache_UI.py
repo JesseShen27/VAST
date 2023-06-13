@@ -1,5 +1,5 @@
 import requests
-from dis_methods import *
+from stat_calc import *
 from player import Player
 from match import Match
 from database import Database
