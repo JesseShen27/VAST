@@ -18,14 +18,14 @@ def home():
         user_index = database1.match.userIndex
 
         if (database1.match.userTeamColor == 'blue'):
-            kd = database1.match.blueTeam[user_index].kills / database1.match.blueTeam[user_index].deaths
+            kd = average_KD(database1.finalData[user_index])
         else:
-            kd = database1.match.redTeam[user_index].kills / database1.match.redTeam[user_index].deaths
+            kd = average_KD(database1.finalData[user_index + 5])
 
-        kd = round(kd, 2)
         kdstr = str(kd)
 
         print("Database set successfully for \'" + user + "\'.\nTo check data use code \'database1.data_print()\'")
+        database1.data_print()
         print("================finished processing=================")
         return redirect(url_for("user", usr=user, kd=kdstr))
     else:
@@ -37,7 +37,7 @@ def user(usr, kd):
     if (usr == "Invalid"):
         return "<h1>Invalid riot ID or region</h1>"
 
-    return "<h1>" + usr + "\'s most recent match kd: " + kd + "</h1>"
+    return "<h1>" + usr + "\'s past 4 game avg kd: " + kd + "</h1>"
 
 if __name__ == "__main__":
     app.run(debug=True)
