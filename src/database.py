@@ -1,4 +1,5 @@
 from match import Match
+
 class Database:
   def __init__(self):
     self.b1 = [[None, None, None, None, None], [None, None, None, None, None], [None, None, None, None, None], [None, None, None, None, None]]
