@@ -3,7 +3,11 @@ def average_KD(playerInGame):
     totalKills = 0
     totalDeaths = 0
     averageKD = None
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 1a82ac786747a7bcc49f4d4478f946775d9e31a0
     # looping through each of the 4 games and adds to total kills and deaths
     for players in range(4):
         totalKills += playerInGame[players][1]
@@ -11,7 +15,11 @@ def average_KD(playerInGame):
 
     averageKD = totalKills / totalDeaths
     newAverage = round(averageKD, 1)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 1a82ac786747a7bcc49f4d4478f946775d9e31a0
     return newAverage
 
 # Method that calculates a player's average ADR for the four games
@@ -22,7 +30,11 @@ def average_ADR(playerInGame):
     # looping through each of the 4 games and adds to total ADR
     for players in range(4):
         totalADR += playerInGame[players][0]
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 1a82ac786747a7bcc49f4d4478f946775d9e31a0
     averageADR = totalADR / 4
     newAverageADR = round(averageADR)
 
@@ -34,8 +46,13 @@ def win_percentage(playerInGame):
     for players in range(4):
         if (playerInGame[players][3] == 'Won'):
             wins += 1
+<<<<<<< HEAD
     
     return wins/4 * 100
 
         
 
+=======
+
+    return wins/4 * 100
+>>>>>>> 1a82ac786747a7bcc49f4d4478f946775d9e31a0
