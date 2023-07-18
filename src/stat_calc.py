@@ -36,5 +36,3 @@ def win_percentage(playerInGame):
             wins += 1
     
     return wins/4 * 100
-
-
