@@ -55,8 +55,6 @@ def get_blue_kd_avg(playerArr, userIndex):
             userTeam = True
             continue
         totalKd += average_KD(playerArr[i])
-        print(average_KD(playerArr[i]))
-    print(totalKd)
     if (userTeam):
         blueTeamAvg  = round(totalKd/4, 2)
     else:
