@@ -16,28 +16,34 @@ def home():
             return redirect(url_for("user", usr="Invalid", kd="Error"))
 
         user_index = database1.match.userIndex
+        usercolor = database1.match.userTeamColor
 
-        if (database1.match.userTeamColor == 'blue'):
-            kd = average_KD(database1.finalData[user_index])
-        else:
-            kd = average_KD(database1.finalData[user_index + 5])
+        if (usercolor == 'red'):
+            user_index += 5
 
+        redKdAvg = get_red_kd_avg(database1.finalData, user_index)
+        blueKdAvg = get_blue_kd_avg(database1.finalData, user_index)
+
+        kd = round(average_KD(database1.finalData[user_index]),2)
         kdstr = str(kd)
 
         print("Database set successfully for \'" + user + "\'.\nTo check data use code \'database1.data_print()\'")
         database1.data_print()
         print("================finished processing=================")
-        return redirect(url_for("user", usr=user, kd=kdstr))
+        return redirect(url_for("user", usr=user,kd=kdstr,red_kd=redKdAvg,blue_kd=blueKdAvg,color=usercolor))
     else:
         return render_template("login.html")
 
-@app.route("/<usr>/<kd>")
-def user(usr, kd):
+@app.route("/<usr>/<kd>/<red_kd>/<blue_kd>/<color>")
+def user(usr, kd, red_kd, blue_kd, color):
 
     if (usr == "Invalid"):
         return "<h1>Invalid riot ID or region</h1>"
 
-    return "<h1>" + usr + "\'s past 4 game avg kd: " + kd + "</h1>"
+    if (color == 'blue'):
+        return "<h1>" + usr + "\'s average kd from prior 4 games: " + kd + "</h1>\n<h1>" + usr + "\'s team's average kd from prior 4 games: " + blue_kd + "</h1>\n<h1>Opposing team's average kd from prior 4 games: " + red_kd + "</h1>"
+    else:
+        return "<h1>" + usr + "\'s average kd from prior 4 games: " + kd + "</h1>\n<h1>" + usr + "\'s team's average kd from prior 4 games: " + red_kd + "</h1>\n<h1>Opposing team's average kd from prior 4 games: " + blue_kd + "</h1>"
 
 if __name__ == "__main__":
     app.run(debug=True)
