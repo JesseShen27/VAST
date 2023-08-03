@@ -3,9 +3,7 @@ def average_KD(playerInGame):
     totalKD = 0.0
     # looping through each of the 4 games and adds to total kills and deaths
     for players in range(4):
-        kills = playerInGame[players][1]
-        deaths = playerInGame[players][2]
-        totalKD += kills/deaths
+        totalKD += playerInGame[players][1]/playerInGame[players][2]
         
     return totalKD/4
 
@@ -25,7 +23,6 @@ def average_ADR(playerInGame):
 
 def win_percentage(playerInGame):
     wins = 0
-
     for players in range(4):
         if (playerInGame[players][3] == 'Won'):
             wins += 1
@@ -60,3 +57,17 @@ def get_blue_kd_avg(playerArr, userIndex):
     else:
         blueTeamAvg = round(totalKd/5, 2)
     return blueTeamAvg
+
+def get_red_wp(playerArr, userIndex):
+    totalWp = 0.0
+    userTeam = False
+    for i in range(5,10):
+        if (i == userIndex):
+            userTeam = True
+            continue
+        totalKd += win_percentage(playerArr[i])
+    if (userTeam):
+        redTeamAvg  = round(totalWp/4, 2)
+    else:
+        redTeamAvg = round(totalWp/5, 2)
+    return redTeamAvg
