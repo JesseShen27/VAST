@@ -58,6 +58,7 @@ def get_blue_kd_avg(playerArr, userIndex):
         blueTeamAvg = round(totalKd/5, 2)
     return blueTeamAvg
 
+
 def get_red_wp(playerArr, userIndex):
     totalWp = 0.0
     userTeam = False
@@ -65,9 +66,23 @@ def get_red_wp(playerArr, userIndex):
         if (i == userIndex):
             userTeam = True
             continue
-        totalKd += win_percentage(playerArr[i])
+        totalWp += win_percentage(playerArr[i])
     if (userTeam):
         redTeamAvg  = round(totalWp/4, 2)
     else:
         redTeamAvg = round(totalWp/5, 2)
     return redTeamAvg
+
+def get_blue_wp(playerArr, userIndex):
+    totalWp = 0.0
+    userTeam = False
+    for i in range(5):
+        if (i == userIndex):
+            userTeam = True
+            continue
+        totalWp += win_percentage(playerArr[i])
+    if (userTeam):
+        blueTeamAvg  = round(totalWp/4, 2)
+    else:
+        blueTeamAvg = round(totalWp/5, 2)
+    return blueTeamAvg
